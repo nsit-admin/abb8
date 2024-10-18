@@ -1,0 +1,38 @@
+<div class="main-wrapper" id="main-wrapper">
+    <!-- <app-header></app-header> -->
+    <div class="row header-search bg-info">
+        <div class="col l8">
+        </div>
+    </div>
+    <div>
+        <div class="p10">
+            <input type="file" #docFile>
+            <input type="submit" (click)="uploadDoc()">
+            <div *ngIf="uploadedDocument" style="display: none;" #uploadedDocumentRef [innerHTML]="uploadedDocument | sanitizeHtml"></div>
+            <ckeditor *ngIf="uploadedDocument" style="display: none;" #editor [editor]="classicEditor" [(ngModel)]="uploadedDocument" (ready)="onReady($event)" id="description" name="description"></ckeditor>
+        </div>
+        <div class="p10">
+            <!-- <button class="btn btn-search" (click)="editDocument()"> EDIT Document</button> -->
+
+            <div class="m-3">
+                <table *ngIf="documentList.length>0">
+                    <th> Documents available in the database</th>
+                    <tr *ngFor="let document of documentList">
+                        <td *ngIf="document.documentName"> {{document.documentName}}</td>
+                        <td *ngIf="document.documentName"><button class="btn btn-search" type="button" (click)="editDocument(document)"><i class="fa fa-edit"
+                                    (click)="editDocument(document)"></i>
+                                EDIT</button></td>
+                        <!-- <td><button class="btn btn-search" (click)="onCompareResults()" [disabled]='!enableCompare'><i class="fa fa-exchange" (click)="openCompare()"></i>  COMPARE</button></td> -->
+                    </tr>
+                </table>
+                <div *ngIf="documentList.length == 0">
+                    No Docuemnts Available
+                </div>
+                <hr>
+            </div>
+
+        </div>
+        <div class="p10" *ngIf="workSpaceObj.versionName != 'Master'">
+            <button class="btn btn-search" type="button" (click)="mergeToMaster()"> Merge to master</button>
+        </div>
+    </div>

@@ -1,0 +1,555 @@
+<div class="main-wrapper" id="main-wrapper">
+    <!-- <app-header></app-header> -->
+
+    <div class="row p-15 bg-info2 dblock breadcrump-sec">
+        <div class="col s1 back-btn">
+            <h5><a [routerLink]="['/pages/dashboard']"><i class="material-icons dp48">arrow_back</i></a></h5>
+        </div>
+        <div class="col s1 docImg">
+            <img src="assets/images/doc-round.svg" alt="" />
+        </div>
+        <div class="col s10" style="margin-left: -2.5px;">
+            <h5 class="card-title black-text font-bold">{{workSpaceObj.name}}</h5>
+        </div>
+    </div>
+    <div class="page-wrapper">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col s9">
+                    <div class="col s16 m-t-10">
+                        <div class="card" style="height: 80px;border:none !important;">
+                            <div class="card-content left-align" style="padding: 15px;">
+                                <div>
+                                    <h6 class="m-b-10 black-text">
+                                        <span><img src="assets/images/blue-rect.svg" alt></span> &nbsp;&nbsp;Document to
+                                        be Merged
+                                    </h6>
+
+                                </div>
+                                <h6 class="m-1-20 doc-merge-tot">
+                                    <span *ngIf="editCountList.length > 0 && documentList.length > 0">{{
+                                        getPercentageRound(editCountList.length/ documentList.length *
+                                        100)}}%</span><span style="color:#8E8E8E;"> ({{editCountList.length}}
+                                        Documents)</span>
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s16 m-t-10">
+                        <div class="card" style="height: 80px;border:none !important;">
+                            <div class="card-content left-align" style="padding: 15px;">
+                                <div>
+                                    <h6 class="m-b-10 black-text">
+                                        <span><img src="assets/images/yellow-rect.svg" alt></span> &nbsp;&nbsp;Total
+                                        Number of Documents
+                                    </h6>
+
+                                </div>
+                                <h6 class="m-t-10 m-1-20 doc-merge-tot">
+                                    {{documentList.length?documentList.length:0}}
+
+                                </h6>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col s112" *ngIf="canReviewChanges">
+                        <div class="card" style="height: 300px;padding:10px;">
+                            <div class="table-responsive1">
+                                <table style>
+                                    <tbody>
+                                        <ng-container *ngIf="!expanded">
+                                            <tr *ngFor="let version of workspaceList | slice:0:3">
+                                                <td width="5%">
+                                                    <img src="assets/images/merge-icon-1.svg">
+                                                </td>
+                                                <td>
+                                                    <h6 class="grey-text"><span
+                                                            style="color: black;">{{version.w_version}}</span> has
+                                                        <span style="color: black;"> {{version.editCount}}
+                                                        </span>more changes compared to the Master version.
+                                                    </h6>
+                                                </td>
+                                                <td>
+                                                    <!-- <h6 class="blue-text"><a href="/pages/merge-document" style="text-decoration: none;"><i><img src="assets/images/merge.svg">&nbsp;</i>Merge to Master</a></h6>  -->
+                                                    <h6 *ngIf="version.isResyncRequired" class="blue-text" [ngClass]="!version.disableResync ? 'cursor-point' : ''" (click)="resyncChanges(version)">
+                                                        <i><img src="assets/images/merge.svg">&nbsp;</i>Resync Changes
+                                                    </h6>
+                                                    <h6 *ngIf="!version.isResyncRequired" class="blue-text cursor-point" (click)="mergeToMaster(version)">
+                                                        <i><img src="assets/images/merge.svg">&nbsp;</i>Review Changes
+                                                    </h6>
+                                                </td>
+
+                                            </tr>
+                                        </ng-container>
+                                        <ng-container *ngIf="expanded">
+                                            <tr *ngFor="let version of workspaceList">
+                                                <td width="5%">
+                                                    <img src="assets/images/merge-icon-1.svg">
+                                                </td>
+                                                <td>
+                                                    <h6 class="grey-text"><span style="color: black;">{{version.w_version}}</span> has
+                                                        <span style="color: black;"> {{version.editCount}}
+                                                        </span>more changes compared to the Master version.
+                                                    </h6>
+                                                </td>
+                                                <td>
+                                                    <!-- <h6 class="blue-text"><a href="/pages/merge-document" style="text-decoration: none;"><i><img src="assets/images/merge.svg">&nbsp;</i>Merge to Master</a></h6>  -->
+                                                    <h6 *ngIf="version.isResyncRequired" class="blue-text cursor-point" (click)="resyncChanges(version)">
+                                                        <i><img src="assets/images/merge.svg">&nbsp;</i>Resync Changes
+                                                    </h6>
+                                                    <h6 *ngIf="!version.isResyncRequired" class="blue-text cursor-point" (click)="mergeToMaster(version)">
+                                                        <i><img src="assets/images/merge.svg">&nbsp;</i>Review Changes
+                                                    </h6>
+                                                </td>
+
+                                            </tr>
+                                        </ng-container>
+                                        <ng-container *ngIf="workspaceList.length > 3">
+                                            <tr>
+                                                <td width="5%">
+
+                                                </td>
+                                                <td></td>
+                                                <td (click)="isExpanded()">
+                                                    <h6 class="blue-text">+ Show <span *ngIf="!expanded">More</span>
+                                                        <span *ngIf="expanded">Less</span>
+                                                    </h6>
+                                                </td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div class="col s13 m-t-0">
+                        <a class="dropdown-trigger share-master btn btn-flat grey lighten-4 left shareBtn" title="{{selectedVersionName}}" style="border: 1px solid #d9e1f7;" (click)="getClicked()">
+                            <i class="material-icons left">share</i>{{selectedVersionName}}</a>
+
+                        <ul id="myVersionModal" class="dropdown-content1 version-model switch-version-popup"
+                            tabindex="0" *ngIf="ShowMaster">
+                            <h6 class="m-t-20 version-model" style="padding: 15px;" tabindex="0">Switch between versions
+                                of this workspace
+                            </h6>
+                            <li style=" padding-left: 10px; padding-right: 10px;" tabindex="0">
+                                <input class="version-model" type="text" [(ngModel)]="versionName"
+                                    (ngModelChange)="searchData($event)" name="messageInputField"
+                                    placeholder="Find a new version">
+                            </li>
+                            <li *ngFor="let item of filteredData; let id=index" tabindex="id"
+                                (click)="versionModelClick(item)">
+                                <a>
+                                    <!-- <i class="right m-l-15" style="margin-top: -10px;"> -->
+                                    <span *ngFor="let c of item?.w_contribtors; let id=index"
+                                        class="btn-small right span-left-minus-10" style="cursor:default;padding:1px;"
+                                        [title]="c"
+                                        [ngStyle]="{ 'backgroundColor': getContributorsStyle(id), 'color': '#ffffff' }">
+                                        {{c | slice:0:1}}
+                                    </span>
+                                    <!-- </i> -->
+                                    <i class="material-icons left">share</i>
+                                    <h6 class="blue-text">{{item.w_version}}</h6>
+                                </a>
+                            </li>
+                            <li class="divider" tabindex="0"></li>
+                        </ul>
+                    </div>
+
+                    <div class="col s18 m-t-10">
+                        <div *ngIf="workspaceListById?.w_tags?.length > 0">
+                            <h6>
+                                <img src="assets/images/tags.svg" alt>&nbsp;&nbsp; {{workspaceListById?.w_tags?.length}}
+                                Tags
+                            </h6>
+                        </div>
+                    </div>
+                    <div class="col s17 m-t-0">
+                        <span *ngFor="let c of wContibutors; let id=index" class="btn-small span-left-minus-10"
+                            style="cursor:default;padding:1px;" [title]="c"
+                            [ngStyle]="{ 'backgroundColor': getContributorsStyle(id), 'color': '#ffffff' }">
+                            {{c | slice:0:1}}
+                        </span>
+                        <!-- <span *ngFor="let item of workSpaceDetails; let id=index">
+                            <span *ngFor="let contName of item?.w_contribtors;let c=index" class="span-left-minus-10"
+                                [ngStyle]="getContributors(contName)" [title]="contName">
+                                <span class="btn-small" style="cursor:default;padding:2px;"
+                                    *ngFor="let contributors of wContibutors;let t=index"
+                                    [ngStyle]="{ 'backgroundColor': getContributorsStyle(c), 'color': '#ffffff' }">
+                                    {{ contributors[0]}}
+                                </span>
+                            </span>
+                        </span> -->
+                    </div>
+                    <div class="col s2 m-t-0">
+                        <a *ngIf="workSpaceObj && workSpaceObj.versionName !== 'Master' && 
+                        (workSpaceObj.w_merge_status !== 'Open')" class="blue-text cursor-point ng-star-inserted" 
+                        (click)="submitForReview()">
+                        <i class="material-icons left">file_upload</i> Submit for Review</a>
+                    </div>
+                    <div class="col s2 m-t-0">
+                        <div [ngClass]="selectedWorkspaceMergeStatus === 'Open' ? 'disabled' : ''" class="dropdown-trigger btn btn-flat grey lighten-4 right" style="border: 1px solid #d9e1f7;" [matMenuTriggerFor]="menu">
+                            <i class="material-icons right">arrow_drop_down</i><i class="material-icons left">share</i>Actions
+                            <mat-menu #menu="matMenu">
+                                <button mat-menu-item class="blue-text font-12 pt-5"
+                                    (click)="openModal(WorkspaceSharetemplate)">
+                                    <mat-icon class="custum-mat-icon">share</mat-icon>
+                                    <span>Share Workspace</span>
+                                </button>
+                                <div class="divider"></div>
+                                <button mat-menu-item class="blue-text font-12 pt-5"
+                                    (click)="openModal(uploadDocument)">
+                                    <mat-icon class="custum-mat-icon">cloud_upload</mat-icon>
+                                    <span>Upload Document</span>
+                                </button>
+                                <div class="divider"></div>
+                                <button mat-menu-item class="blue-text font-12 pt-5" (click)="createDocument()">
+                                    <mat-icon class="custum-mat-icon">add_circle_outline</mat-icon>
+                                    <span>Create Document</span>
+                                </button>
+                            </mat-menu>
+                        </div>
+                        <div>
+                            <ng-template #WorkspaceSharetemplate>
+                                <div class="modal-header" style="border-bottom: none;padding:0.25em;">
+                                    <button type="button" class="close pull-right" aria-label="Close"
+                                        (click)="modalRef.hide();">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form [formGroup]="workspaceShareFormGroup" (ngSubmit)="onSubmit(form)"
+                                        autocomplete="off" #form="ngForm">
+                                        <div class="row"
+                                            style="margin-top: 10px;margin-left:-0.5em;margin-right:-0.5em;">
+                                            <div class="input-field col s12 mt-0 mb-4">
+                                                <input formControlName="versionName" name="versionName" type="text"
+                                                    maxLength=40 placeholder="Version Name*" required>
+                                                <div
+                                                    *ngIf="workspaceShareForm?.versionName.dirty && workspaceShareForm?.versionName.errors">
+                                                    <div class="errorMsg"
+                                                        *ngIf="workspaceShareForm?.versionName.hasError('required')">
+                                                        Version Name is <strong>required</strong>
+                                                    </div>
+                                                    <div class="errorMsg"
+                                                        *ngIf="workspaceShareForm?.versionName.hasError('pattern')">
+                                                        Enter valid Version Name
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                            style="margin-top: 10px;margin-left:-0.5em;margin-right:-0.5em;">
+                                            <div class="input-field col s12 mt-0 mb-4">
+                                                <div class="chips chips-placeholder chips-autocomplete">
+                                                    <mat-chip-list #chipList tabindex="-1">
+                                                        <mat-chip *ngFor="let email of selectedEmailList"
+                                                            [selectable]="selectable" [removable]="removable"
+                                                            (removed)="remove(email)">
+                                                            {{email}}
+                                                            <mat-icon class="material-icons" matChipRemove
+                                                                *ngIf="removable">cancel</mat-icon>
+                                                        </mat-chip>
+                                                        <input #emailInput formControlName="email" name="email" type="text" placeholder="Enter the email to share*"  [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="addOnBlur"
+                                                            (matChipInputTokenEnd)="add($event)" (focus)="validateNullEmail();" maxlength="50">
+                                                            
+                                                        <!-- <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+                                                            <mat-option *ngFor="let email of filteredEmail | async" [value]="email">{{email}}
+                                                            </mat-option>
+                                                        </mat-autocomplete> -->
+                                                    </mat-chip-list>
+                                                </div>
+                                                <div *ngIf="(workspaceShareForm?.email.dirty && workspaceShareForm?.email.errors)||(errorMessageEmail)">
+                                                    <div class="errorMsg" id="errorMsgEmail" *ngIf="workspaceShareForm?.email.hasError('pattern')||(errorMessageEmail)">
+                                                        Enter valid Email Id
+                                                    </div>
+                                                </div>
+
+                                                <div class="errorMsg" id="errorMsgEmail" *ngIf="sharedEmailFlag">
+                                                    This workspace has already been shared to this entered email.
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row m-t-10">
+                                            <div class="col s12">
+                                                <button class="btn-large w100 btn-primary" type="submit"
+                                                    style="margin-top: 8px;" (mouseover)="validateNullEmail();"
+                                                    [disabled]="!form.valid || selectedEmailList.length===0"> Share
+                                                    Workspace</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </ng-template>
+                        </div>
+                        <!-- <div>
+                            <ng-template #delegateWorkspace>
+                                <div class="modal-header" style="border-bottom: none;padding:0.25em;">
+                                    <button type="button" class="close pull-right" aria-label="Close"
+                                        (click)="modalRef.hide();">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form [formGroup]="workspaceShareFormGroup" (ngSubmit)="onSumbitCloneWorkspace(form)"
+                                        autocomplete="off" #form="ngForm">
+                                        <div class="row"
+                                            style="margin-top: 10px;margin-left:-0.5em;margin-right:-0.5em;">
+                                            <div class="input-field col s12 mt-0 mb-4">
+                                                <input formControlName="versionName" name="versionName" type="text"
+                                                    maxLength=40 placeholder="Version Name*" required [readonly]="true">
+                                                <div
+                                                    *ngIf="workspaceShareForm?.versionName.dirty && workspaceShareForm?.versionName.errors">
+                                                    <div class="errorMsg"
+                                                        *ngIf="workspaceShareForm?.versionName.hasError('required')">
+                                                        Version Name is <strong>required</strong>
+                                                    </div>
+                                                    <div class="errorMsg"
+                                                        *ngIf="workspaceShareForm?.versionName.hasError('pattern')">
+                                                        Enter valid Version Name
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row"
+                                            style="margin-top: 10px;margin-left:-0.5em;margin-right:-0.5em;">
+                                            <div class="input-field col s12 mt-0 mb-4">
+                                                <div class="chips chips-placeholder chips-autocomplete">
+                                                    <mat-chip-list #chipList tabindex="-1">
+                                                        <mat-chip *ngFor="let email of selectedEmailList"
+                                                            [selectable]="selectable" [removable]="removable"
+                                                            (removed)="remove(email)">
+                                                            {{email}}
+                                                            <mat-icon class="material-icons" matChipRemove
+                                                                *ngIf="removable">cancel</mat-icon>
+                                                        </mat-chip>
+                                                        <input #emailInput formControlName="email" name="email"
+                                                            type="text" placeholder="Enter the email to share*"
+                                                            [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                                                            [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                            [matChipInputAddOnBlur]="addOnBlur"
+                                                            (matChipInputTokenEnd)="add($event)"
+                                                            (focus)="validateNullEmail();" maxlength="50">
+                                                        <mat-autocomplete #auto="matAutocomplete"
+                                                            (optionSelected)="selected($event)">
+                                                            <mat-option *ngFor="let email of filteredEmail | async"
+                                                                [value]="email">{{email}}
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+                                                    </mat-chip-list>
+                                                </div>
+                                                <div
+                                                    *ngIf="(workspaceShareForm?.email.dirty && workspaceShareForm?.email.errors)||(errorMessageEmail)">
+                                                    <div class="errorMsg" id="errorMsgEmail"
+                                                        *ngIf="workspaceShareForm?.email.hasError('pattern')||(errorMessageEmail)">
+                                                        Enter valid Email Id
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                        <div class="row m-t-10">
+                                            <div class="col s12">
+                                                <button class="btn-large w100 btn-primary" type="submit"
+                                                    style="margin-top: 8px;" (mouseover)="validateNullEmail();"
+                                                    [disabled]="!form.valid || selectedEmailList.length===0"> Delegate
+                                                    Workspace</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </ng-template>
+                        </div> -->
+
+                        <div>
+                            <div *ngIf="uploadedDocument" style="display: none;" #uploadedDocumentRef
+                                [innerHTML]="uploadedDocument | sanitizeHtml">
+                            </div>
+                            <ckeditor *ngIf="uploadedDocument" style="display: none;" #editor [editor]="classicEditor"
+                                [(ngModel)]="uploadedDocument" (ready)="onReady($event)" id="description"
+                                name="description">
+                            </ckeditor>
+                            <ng-template #uploadDocument>
+                                <div class="modal-header" style="border-bottom: none;padding:0.25em;">
+                                    <button type="button" class="close pull-right" aria-label="Close"
+                                        (click)="uploadedDocuments=[];modalRef.hide();">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <form [formGroup]="workspaceShareFormGroup">
+                                        <div class="row"
+                                            style="margin-top: 10px;margin-left:-1.5em;margin-right:-1.5em;">
+                                            <div class="col-md-12">
+                                                <div class="fileupload" appDragDropFileUpload (click)="docFile.click()"
+                                                    (fileDropped)="addDocumentsForUpload($event)">
+                                                    <span class="ddinfo">Choose a file or drag here</span>
+                                                    <input type="file" name="avatars" #docFile
+                                                        (change)="addDocumentsForUpload($event.target.files)"
+                                                        accept=".docx" hidden multiple>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="errorMsg" class="error">{{errorMsg}}</div>
+                                            <div class="col-md-12">
+                                                <div *ngFor="let doc of uploadedDocuments">
+                                                    <p>{{doc.name}}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row m-t-10">
+                                            <div class="col s12">
+                                                <button class="btn-large w100 btn-primary"
+                                                    [disabled]="uploadedDocuments.length === 0"
+                                                    (click)="uploadDoc()">Upload</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </ng-template>
+                        </div>
+
+                    </div>
+                    <div class="col s112 m-t-5">
+
+                    </div>
+                    <div class="col s12 m-t-0">
+                        <input class="document-model" type="text" [(ngModel)]="documentName" (ngModelChange)="searchDocumentData($event)" name="documentNameField" placeholder="  Start typing File Name to quikly sort them out">
+                        <div *ngIf="filteredDocumentData.length == 0"> Please upload or create new documents under Actions</div>
+                        <div class="card document-list-table" *ngIf="filteredDocumentData.length > 0" [ngStyle]="{'max-height': completeEditCount > 0 ? '300px' : '620px' , 'height': completeEditCount > 0 ? '300px' : '620px' }">
+                            <div class="table-responsive" style="padding-bottom:6px">
+                                <table>
+                                    <tbody>
+                                        <tr *ngFor="let doc of filteredDocumentData">
+                                            <td width="5%">
+                                                <img src="assets/images/file.svg">
+                                            </td>
+                                            <td>
+                                                <h6 class="blue-text cursor-point">
+                                                    <a (click)="editDocument(doc)">{{doc.documentName}}</a>
+                                                </h6>
+                                            </td>
+                                            <td>
+                                                <h6 class="black-text">Created by {{doc.created_by}}</h6>
+                                            </td>
+                                            <td>
+                                                <h6 class="black-text">you edited {{ doc.modified_dt | timeAgo }}</h6>
+                                            </td>
+                                            <td>
+                                                <div class="popover-icon">
+                                                    <a class="btn-floating btn white">
+                                                        <!-- <img src="assets/images/users/1.jpg" class="circle" width="41"> -->
+                                                        <span class="btn-small" style="cursor:default;padding:2px;"
+                                                            [ngStyle]="{ 'backgroundColor': getContributorsStyle(0), 'color': '#ffffff' }">
+                                                            {{ doc.modified_by?.charAt(0)}}
+                                                        </span>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                            <!-- <td>
+                                                <h6>
+                                                    <span class="btn-floating btn-medium btn-primary"
+                                                        (click)="deleteDoc(doc)">
+                                                        <i class="material-icons">delete</i>
+                                                    </span>
+                                                </h6>
+                                            </td> -->
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="col s3 m-t-10">
+                    <div class="card" style="max-height: 870px!important;border-left:2px solid#225DE7;">
+                        <div class="card-content">
+                            <h6> <span class="btn-floating btn-medium btn-primary"><i
+                                        class="material-icons">chat</i></span>
+                                <span class="mail-contnet">
+                                    <span class="">&nbsp;&nbsp;Activities</span>
+                                </span>
+                            </h6>
+                            <form [formGroup]="chatFormGroup" autocomplete="off">
+                                <div class="row">
+                                    <div class="cols s9">
+                                        <div class="input-field  m-t-20 m-b-0"
+                                            style="position: relative;margin-left: 20px;">
+                                            <input type="text" class="form-control" [(ngModel)]="messageText"
+                                                formControlName="messageInputField" name="messageInputField"
+                                                placeholder="Type and enter" name="msg" autocomplete="off"
+                                                [disabled]="chatForm?.messageInputField.errors" (enter)="sendMessage()"
+                                                required minlength="2" maxlength="200">
+                                        </div>
+                                    </div>
+                                    <div class="col s3  m-t-20">
+                                        <button type="submit" class="btn-floating btn-small right btn-primary"
+                                            (click)="sendMessage()" [disabled]="chatForm?.messageInputField.errors">
+                                            <i class="fas fa-paper-plane"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-content" style="margin-top: -20px;">
+                            <div class="" style="overflow: hidden; outline: none;" tabindex="5001">
+                                <div class="chat-body">
+                                    <div #list class="list" *ngIf="senderEmail">
+                                        <div [ngClass]="(instantChat.email == senderEmail)? 'rightChat' : 'leftChat'"
+                                            class="answer" *ngFor="let instantChat of instantMessage"
+                                            style="margin-top: 30px;">
+
+                                            <div *ngIf="instantChat.email == senderEmail" class="chat-img">
+                                                Me
+                                            </div>
+                                            <div *ngIf="instantChat.email != senderEmail" class="chat-img">
+                                                {{instantChat.user.charAt(0)}}
+                                            </div>
+                                            <div class="name" *ngIf="instantChat.email != senderEmail">
+                                                <h6>{{instantChat.user}} </h6>
+                                            </div>
+                                            <div class="chat-content" *ngIf="instantChat.email != senderEmail">    
+                                                <div class=" box bg-light-info text"> {{instantChat.message}}</div>
+                                                <div class="time">{{instantChat.time}}</div>
+                                            </div>
+                                            <div class="chat-content" *ngIf="instantChat.email == senderEmail">
+                                                <div class="box bg-light-info rightChat-text"> {{instantChat.message}}</div>
+                                                <div class="rightChat-time">{{instantChat.time}}</div>
+                                            </div>
+                                        </div>
+                                        <div [ngClass]="(historychat.email == senderEmail)? 'rightChat' : 'leftChat'"
+                                            class="answer " *ngFor="let historychat of historyMessages"
+                                            style="margin-top: 30px;">
+                                            <div *ngIf="historychat.email == senderEmail" class="chat-img">
+                                                Me
+                                            </div>
+                                            <div *ngIf="historychat.email != senderEmail" class="chat-img">
+                                                {{historychat.Name.charAt(0)}} 
+                                            </div>
+                                            <div class="name" *ngIf="historychat.email != senderEmail">
+                                                <h6>{{historychat.Name}} </h6>
+                                            </div>
+                                            <div class="chat-content" *ngIf="historychat.email != senderEmail">
+                                                <div class=" box bg-light-info text"> {{historychat.message}}</div>
+                                                <div class="time">{{historychat.date | timeAgo}}</div>
+                                            </div>
+                                            <div class="chat-content" *ngIf="historychat.email == senderEmail">
+                                                <div class="box bg-light-info rightChat-text"> {{historychat.message}}</div>
+                                                <div class="rightChat-time">{{historychat.date | timeAgo}}</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,35 @@
+.accept-mat-title{
+    width: 91.66667% !important;
+    float: left;
+    background-color: #0A1A7B !important;
+}
+.accept-mat-icon{
+    width: 8.33333%;
+    margin-left: auto;
+    left: auto;
+    right: auto;
+    float: left;
+    padding: 0 0.75rem;
+}
+.accept-mat-title-main{
+    height: calc(100% - 56px);
+    max-height: 100%;
+    width: 100%;
+    overflow-y: auto;
+}
+.mt20{
+    margin-top: 20px;
+}
+
+@media (max-width: 767px) {
+      .mat-dialog-container {
+        width: 100% !important;
+      }
+      .accept-mat-title{
+        width: 74.66667% !important;
+    }
+    .accept-mat-icon{
+        width: 25.33333%;
+    }
+    }
+  

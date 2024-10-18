@@ -1,0 +1,438 @@
+<div class="main-wrapper" id="main-wrapper">
+    <!-- <app-header></app-header> -->
+    <!-- <div class="row p-15  bg-info2 dblock"> -->
+
+    <!-- <div class="col s1">
+            <h5><i class="material-icons dp48">arrow_back</i></h5>
+        </div> -->
+    <!-- <div class="col s1" style="margin-top: -5px">
+            <img src="assets/images/doc-round.svg" alt="" />
+        </div> -->
+    <!-- <div class="col s10 dash-breadcrumb">
+            <h5 class="card-title black-text font-bold">Dashboard</h5>
+        </div> -->
+</div>
+<div class="page-wrapper">
+    <div class="container-fluid">
+        <div class="row m-t-10 dashboard-main">
+            <div class="col s3 dashboard-left" [ngStyle]="{'max-height':panelOpenState ? '58.6rem' : '45.2rem'}">
+                <!-- Welcome <b style="font-size: medium;"> {{profileObj.fname}} {{profileObj.lname}}</b><br><br> -->
+                <br><h5 class="card-title black-text font-bold">Notifications</h5>
+                <div *ngIf="notificationData && notificationData.length > 0" class="card">
+                    <div class="card-content message-center" *ngFor="let item of notificationData">
+                        <span class="mail-contnet">
+                            <span class="mail-desc">{{item?.n_desc}}</span> <span class="time">{{item?.created_dt |
+                                        date:'shortTime'}}</span>
+                        </span>
+                    </div>
+                </div>
+                <div *ngIf="notificationData && notificationData.length == 0" class="card">
+                    <div class="card-content message-center">
+                        <span class="mail-contnet">
+                            <span class="mail-desc">No notifications available</span>
+                        </span>
+                        <!-- </a> -->
+                    </div>
+                </div>
+
+            </div>
+            <div class="col s9 dashboard-right">
+                <!-- <div row class="col s12 m-t-10">
+                        <div style="height: 10px; background-color: #FFC212; width: 30%"></div>
+                        <div style="height: 10px; background-color: #225DE7; width: 15%"></div>
+                        <div style="height: 10px; background-color: #D8D8D8; width: 55%"></div>
+                    </div> -->
+                <div class="col 12">
+                    <mat-accordion>
+                        <mat-expansion-panel (opened)="panelOpenState = true" (closed)="panelOpenState = false"
+                            [expanded]="true">
+                            <mat-expansion-panel-header>
+                                <mat-panel-title>
+                                    <div style="margin-left: 25px;">
+                                        <span class="card-title black-text font-bold" style="font-size: 20px;">
+                                            {{totalDoc}}</span>&nbsp;&nbsp;<span>Documents</span>
+                                    </div>
+                                </mat-panel-title>
+                                <mat-panel-description>
+                                    <!-- Click to view detailed statistics  -->
+                                </mat-panel-description>
+                            </mat-expansion-panel-header>
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="col l5" *ngIf="legendWidth1 != '0%'"
+                                        style="height: 10px; background-color: #225DE7"
+                                        [ngStyle]="{'width': legendWidth1}">
+                                    </div>
+                                    <div class="col l5" *ngIf="legendWidth2 != '0%'"
+                                        style="height: 10px; background-color: #FFC212"
+                                        [ngStyle]="{'width':legendWidth2}">
+                                    </div>
+                                    <div class="col l5" style="height: 10px; background-color: #D8D8D8"
+                                        *ngIf="legendWidth3 != '0%'" [ngStyle]="{'width': legendWidth3 }">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s4 m-t-10">
+                                <div class="card" style="height: 80px;border:none !important;">
+                                    <div class="card-content left-align" style="padding: 15px;">
+                                        <div>
+                                            <h6 class="m-b-10 black-text" style="font-size: 13px;">
+                                                <span><img src="assets/images/blue-rect.svg" alt></span>
+                                                <b>&nbsp;&nbsp;Approved</b>
+                                            </h6>
+
+                                        </div>
+                                        <h6 class="m-1-20 doc-merge-tot">
+                                            <span>{{legend1Percentage | number:'1.0-2' }}% ({{approvedDocLength}}
+                                                documents)</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s4 m-t-10">
+                                <div class="card" style="height: 80px;border:none !important;">
+                                    <div class="card-content left-align" style="padding: 15px;">
+                                        <div>
+                                            <h6 class="m-b-10 black-text" style="font-size: 13px;">
+                                                <span><img src="assets/images/yellow-rect.svg" alt></span>
+                                                <b>&nbsp;&nbsp;Pending Approval</b>
+                                            </h6>
+
+                                        </div>
+                                        <h6 class="m-1-20 doc-merge-tot">
+                                            <span>{{legend2Percentage | number:'1.0-2' }}% ({{pendingDocLength}}
+                                                documents)</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col s4 m-t-10">
+                                <div class="card" style="height: 80px;border:none !important;">
+                                    <div class="card-content left-align" style="padding: 15px;">
+                                        <div>
+                                            <h6 class="m-b-10 black-text" style="font-size: 13px;">
+                                                <span><img src="assets/images/grey-rect.svg" alt></span>
+                                                <b>&nbsp;&nbsp;Drafts</b>
+                                            </h6>
+
+                                        </div>
+                                        <h6 class="m-1-20 doc-merge-tot">
+                                            <span>{{legend3Percentage | number:'1.0-2' }}% ({{draftsDocLength}}
+                                                documents)</span>
+                                        </h6>
+                                    </div>
+                                </div>
+                            </div>
+                        </mat-expansion-panel>
+                    </mat-accordion>
+                </div>
+
+
+                <div class="col 12 p-0">
+                    <div class="workspacelist-container">
+                        <div class="row p-15  bg-info2 dblock">
+                            <div class="col s3" style="float:left;font-size: 20px;">
+                                <h5 class="black-text font-bold">Workspaces</h5>
+                            </div>
+                            <div class="col s9 create-container-btn">
+                                <div>
+                                    <ng-template #WorkspaceCreatetemplate>
+                                        <div class="modal-header" style="border-bottom: none;">
+                                            <button type="button" class="close pull-right" aria-label="Close"
+                                                (click)="modalRef.hide();resetForm();selectedTagList=[]">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form [formGroup]="workspaceFormGroup" autocomplete="off"
+                                                (ngSubmit)="onSubmit(form)" #form="ngForm">
+                                                <div class="row">
+                                                    <div class="input-field col s12 ">
+                                                        <input type="text" formControlName="workspaceName" name="name"
+                                                            placeholder="Workspace Name*" maxlength="40"
+                                                            style="overflow:hidden;">
+                                                        <div
+                                                            *ngIf="workspaceForm?.workspaceName.dirty && workspaceForm?.workspaceName.invalid && workspaceForm?.workspaceName.errors">
+                                                            <div class="errorMsg"
+                                                                *ngIf="workspaceForm?.workspaceName.hasError('required')">
+                                                                Workspace Name is <strong>required</strong>
+                                                            </div>
+                                                            <div class="errorMsg"
+                                                                *ngIf="workspaceForm?.workspaceName.hasError('pattern')">
+                                                                Enter valid Workspace Name
+                                                            </div>
+                                                        </div>
+                                                        <div *ngIf="errorMessage" class="errorMsg">{{errorMessage}} </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="input-field col s12">
+                                                        <textarea type="text" rows="2" id="desc" formControlName="workspaceDesc"
+                                                            name="workspaceDesc"
+                                                            style="border: 0px; border-bottom: 1px solid;  margin-top: 3px; overflow:hidden; "
+                                                            placeholder="Description (140 Characters Max)"
+                                                            maxlength="140"></textarea>
+                                                        <div
+                                                            *ngIf="workspaceForm?.workspaceDesc.dirty && workspaceForm?.workspaceDesc.invalid && workspaceForm?.workspaceDesc.errors">
+                                                            <div class="errorMsg"
+                                                                *ngIf="workspaceForm?.workspaceDesc.hasError('pattern')">
+                                                                Description cannot start with space and should be valid
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="row ">
+                                                    <div class="input-field col s12">
+                                                        <div class="chips chips-placeholder chips-autocomplete">
+                                                            <mat-chip-list #chipList aria-label="Tags selection">
+                                                                <mat-chip *ngFor="let tag of selectedTagList"
+                                                                    [selectable]="selectable" [removable]="removable"
+                                                                    (removed)="remove(tag)">
+                                                                    {{tag}}
+                                                                    <mat-icon class="material-icons" matChipRemove
+                                                                        *ngIf="removable">cancel</mat-icon>
+                                                                </mat-chip>
+                                                                <input placeholder="Enter a tag" #tagInput
+                                                                    style="overflow:hidden;" formControlName="workspaceTagname"
+                                                                    [matAutocomplete]="auto" [matChipInputFor]="chipList"
+                                                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                                                    [matChipInputAddOnBlur]="addOnBlur"
+                                                                    (matChipInputTokenEnd)="add($event)" maxlength="30">
+                                                            </mat-chip-list>
+                                                            <!-- (focus)="getTagsList($event)"
+                                                                    onKeyPress="if(this.value.length==30) return false;" -->
+                                                        </div>
+                                                        <mat-autocomplete #auto="matAutocomplete"
+                                                            (optionSelected)="selected($event)">
+                                                            <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+                                                                {{tag}}
+                                                            </mat-option>
+                                                        </mat-autocomplete>
+                                                    </div>
+                                                </div>
+                                                <div class="row m-t-10">
+                                                    <div class="col s12">
+                                                        <button class="btn-large w100 btn-primary" type="submit"
+                                                            style="margin-top: 8px;" [disabled]="workspaceFormGroup?.invalid">
+                                                            Create
+                                                            Workspace</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </ng-template>
+                                    <ng-template #viewAnalyticstemplate>
+                                        <div class="modal-header" style="border-bottom: none;">
+                                            <button type="button" class="close pull-right" aria-label="Close"
+                                                (click)="modalRef.hide();resetForm();selectedTagList=[]">
+                                                <span aria-hidden="true">&times;</span>
+                                            </button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <div class="col 12">
+                                                <div>
+                                                    <span class="card-title black-text font-bold" style="font-size: 24px;">
+                                                        120</span>&nbsp;&nbsp;<span>Documents</span>
+                                                </div>
+                                                <!-- <div class="card">
+                                                        <div class="card-content">
+                                                            <div class="col l5"
+                                                                style="border-radius: 5px 0px 0px 5px; height: 10px; background-color: #225DE7; width: 30%">
+                                                            </div>
+                                                            <div class="col l5" style="height: 10px; background-color: #FFC212; width: 15%">
+                                                            </div>
+                                                            <div class="col l5"
+                                                                style="border-radius: 0px 5px 5px 0px; height: 10px; background-color: #D8D8D8; width: 55%">
+                                                            </div>
+                                                        </div>
+                                                    </div> -->
+                                            </div>
+                                            <div class="col s4 m-t-10">
+                                                <div class="card" style="height: 80px;border:none !important;">
+                                                    <div class="card-content left-align" style="padding: 15px;">
+                                                        <div>
+                                                            <h6 class="m-b-10 black-text">
+                                                                <span><img src="assets/images/blue-rect.svg" alt></span>
+                                                                &nbsp;&nbsp;Client
+                                                                Approved & Signed
+                                                            </h6>
+        
+                                                        </div>
+                                                        <h6 class="m-1-20 doc-merge-tot">
+                                                            <span>55% (66 documents)</span>
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s4 m-t-10">
+                                                <div class="card" style="height: 80px;border:none !important;">
+                                                    <div class="card-content left-align" style="padding: 15px;">
+                                                        <div>
+                                                            <h6 class="m-b-10 black-text">
+                                                                <span><img src="assets/images/yellow-rect.svg" alt></span>
+                                                                &nbsp;&nbsp;Pending Approval
+                                                            </h6>
+        
+                                                        </div>
+                                                        <h6 class="m-1-20 doc-merge-tot">
+                                                            <span>40% (48 documents)</span>
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col s4 m-t-10">
+                                                <div class="card" style="height: 80px;border:none !important;">
+                                                    <div class="card-content left-align" style="padding: 15px;">
+                                                        <div>
+                                                            <h6 class="m-b-10 black-text">
+                                                                <span><img src="assets/images/grey-rect.svg" alt></span>
+                                                                &nbsp;&nbsp;Drafts
+                                                            </h6>
+        
+                                                        </div>
+                                                        <h6 class="m-1-20 doc-merge-tot">
+                                                            <span>40% (48 documents)</span>
+                                                        </h6>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                    <!-- <div class="search-sec">
+                                                        <input type="search" class="form-control search-input" autocomplete="off" placeholder="Search Workspace/Tags"
+                                                            (ngModelChange)="searchWordChange($event)" [(ngModel)]="searchField">
+                                                        <span class="material-icons search-icon" matPrefix>
+                                                            search
+                                                        </span>
+                                                    </div> -->
+                                                    
+                                                    <div class="btn-dropdown-trigger btn right create-workspace-btn"
+                                                    (click)="openModal(WorkspaceCreatetemplate)">
+                                        <!-- <i class="material-icons right">arrow_drop_down</i> -->
+                                        <i class="material-icons left">add</i>Create Workspace
+                                    </div>
+        
+                                    <!-- <div class="btn-dropdown-trigger btn right"
+                                            style="background-color: #3965d7; float: right;"
+                                            (click)="openModal(viewAnalyticstemplate)">
+                                            <i class="material-icons right">arrow_drop_down</i>View Analytics
+                                        </div> -->
+                                </div>
+                            </div>
+                            <div class="col s12">
+                                <span class="fa fa-search workspace-search-icon"></span>
+                                <input type="search" class="workspace-search" autocomplete="off" placeholder="Search"
+                                (ngModelChange)="searchWordChange($event)" [formControl]="searchField">
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="!workspaceList || !workspaceList.length"
+                        class="d-flex no-block align-items-center m-b-15 m-t-5" style="margin-left: 15px;">
+                        No workspaces available. Please &nbsp; <a
+                            style="cursor:pointer;color: lightskyblue; text-decoration: underline;"
+                            (click)="openModal(WorkspaceCreatetemplate)"> create workspace </a> &nbsp;to
+                        continue
+                    </div>
+                    <div class="col l4" *ngFor="let item of workspaceList; let id=index">
+                        <div class="card workspace-card">
+                            <div class="card-content">
+                                <div class="row workspace-card-header">
+                                    <div class="col l10 p-0">
+                                        <h6><b>
+                                                <a href="javascript:void(0)" (click)="onSelectWorkSpace(item)">{{
+                                                        item?.w_name }}</a>
+                                            </b></h6>
+                                    </div>
+                                    <div class="col l2 p-0">
+                                        <div class="dropdown-trigger1 material-icons right" [matMenuTriggerFor]="menu">
+                                            more_vert
+                                        </div>
+                                        <mat-menu #menu="matMenu" class="matmenu-dropdown-content">
+                                            <button *ngIf="!item.sharedVersion" mat-menu-item
+                                                (click)="deleteWorkSpace(id, item._id)">
+                                                <mat-icon class="icon_class">delete</mat-icon>
+                                                <span></span>
+                                                <span class="span_class">Delete</span>
+                                            </button>
+                                            <div class="divider" tabindex="0"></div>
+                                            <button mat-menu-item id="Archiveid" (click)="archiveWorkSpace(id, item._id)"
+                                                [disabled]="item.status == 'Archived'">
+                                                <mat-icon class="icon_class"
+                                                    [ngStyle]="item.status =='Archived'?{'color':'#9098ac'} : {'color': '#225DE7'}">
+                                                    archive</mat-icon>
+                                                <span class="span_class" id="span_id"
+                                                    [ngStyle]="item.status =='Archived'?{'color':'#9098ac'} : {'color': '#2196F3'}">Archive</span>
+                                            </button>
+                                        </mat-menu>
+                                    </div>
+                                    <div class="col s13 p-0">
+                                        <div class="d-flex no-block align-items-center">
+                                            <span style="font-size: 12px;color:#9098ac"><i class="ti-user"></i>
+                                                {{ item?.w_owner }}</span>
+                                            <div class="ml-auto" style="font-size: 12px;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row workspace-card-content">
+                                    <div class="col l13 p-0">
+                                        <span *ngFor="let tagName of item?.w_tags;let j=index"
+                                            [ngStyle]="getTags(tagName)">
+                                            <span class="new badge  lighten-5 m-t-5" id="colorTarget"
+                                                *ngFor="let tags of wTags;let k =index;" [ngStyle]="getColors(j)">
+                                                <b>{{tags}}</b>
+                                            </span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <div class="row workspace-card-footer">
+                                    <div class="col l13 card-action">
+                                        <span *ngFor="let contName of item?.w_contribtors;let c=index"
+                                            class="span-left-minus-10" [ngStyle]="getContributors(contName)"
+                                            [title]="contName">
+                                            <span class="btn-small" style="cursor:default;padding:1px;"
+                                                *ngFor="let contributors of wContibutors;let t=index"
+                                                [ngStyle]="{ 'backgroundColor': getContributorsStyle(c), 'color': '#ffffff' }">
+                                                {{ contributors[0]}}
+                                            </span>
+                                        </span>
+                                        <span class="contributor-len"><i class="ti-user"></i>
+                                            {{ item?.w_tags.length}}</span>
+                                    </div>
+                                </div>
+
+                                <!-- <div class="col s12" style="padding-left: 2px;padding-right: 2px;">
+                                    <div class="card small m-t-20" style="border:none; height: 8rem;">
+                                        <div class="w-tags">
+                                            <span *ngFor="let tagName of item?.w_tags;let j=index"
+                                                [ngStyle]="getTags(tagName)">
+                                                <span class="new badge  lighten-5 m-t-5" id="colorTarget"
+                                                    *ngFor="let tags of wTags;let k =index;" [ngStyle]="getColors(j)">
+                                                    <b>{{tags}}</b>
+                                                </span>
+                                            </span>
+                                        </div>
+                                        <div class="card-action"> -->
+                                            <!-- <img src="assets/images/group.png" width="147" height="35" style="margin-right: 40%;" alt="">  -->
+                                            <!-- <span *ngFor="let contName of item?.w_contribtors;let c=index"
+                                                class="span-left-minus-10" [ngStyle]="getContributors(contName)"
+                                                [title]="contName">
+                                                <span class="btn-small" style="cursor:default;padding:1px;"
+                                                    *ngFor="let contributors of wContibutors;let t=index"
+                                                    [ngStyle]="{ 'backgroundColor': getContributorsStyle(c), 'color': '#ffffff' }">
+                                                    {{ contributors[0]}}
+                                                </span>
+                                            </span>
+                                            <span class="contributor-len"><i class="ti-user"></i>
+                                                {{ item?.w_tags.length}}</span>
+                                        </div>
+                                    </div>
+                                </div> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>

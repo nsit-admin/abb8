@@ -1,0 +1,79 @@
+service: abb8-auth-service
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  stage: dev
+  region: us-east-1
+
+functions:
+  merge:
+    handler: merge.handler
+    events:
+      - http: 'POST /merge'
+  # register:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'POST /register'
+  # forgot-pass:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'GET /forgot-pass'
+  # validate-token:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'POST /validate-token'
+  # merge:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'POST /merge'
+  # change-password:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'POST /change-password'
+  # validateRstPwdToken:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'POST /validateRstPwdToken'
+  # createWorkspace:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'POST /workspace/create'
+  # list-documents:
+  #   handler: workspace-details.handler
+  #   events:
+  #     - http: 'GET /list-documents'
+  # upload-document:
+  #   handler: workspace-details.handler
+  #   events:
+  #     - http: 'POST /upload-document'
+  # editDocument:
+  #   handler: workspace-details.handler
+  #   events:
+  #     - http: 'PUT /editDocument'  
+  # workspaces:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'GET /workspaces'
+  # user:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'GET /user'
+  # sortWorkspaces:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'GET /workspace/sort'
+  # searchWorkspaceByTags:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'GET /searchWorkSpace-tag'
+  # updateWorkSpaceById:
+  #   handler: auth.handler
+  #   events:
+  #     - http: 'POST /updateWorkSpaceById'
+  # list-workspaces:
+  #   handler: workspace-details.handler
+  #   events:
+  #     - http: 'GET /list-workspaces'  
+plugins:
+  - serverless-offline

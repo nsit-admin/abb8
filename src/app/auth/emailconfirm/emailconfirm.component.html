@@ -1,0 +1,27 @@
+<div>
+    <div class="p-l-10">
+        <h5 *ngIf="!resetPwdSucc" class="font-medium m-b-0 m-t-40" style="text-align: center">Email Verification
+        </h5>
+        <h5 *ngIf="resetPwdSucc" class="font-medium m-b-0 m-t-40" style="text-align: center">Success
+        </h5>
+    </div>
+    <div class="center-align m-t-20">
+        <a href="javascript:void(0)" class=" btn-floating btn-large blue darken-1 m-t-10">
+            <i *ngIf="!resetPwdSucc" class="fa fa-envelope"></i>
+            <i *ngIf="resetPwdSucc" class="fa fa-check"></i>
+        </a>
+    </div>
+    <div *ngIf="!resetPwdSucc" class="center-align m-t-30 db">
+        {{infoMsg}}
+    </div>
+    <div *ngIf="resetPwdSucc" class="center-align m-t-30 db">
+        {{infoMsg}}
+    </div>
+</div>
+<div class="col s12" *ngIf="!resetPwdSucc">
+    <div class="row m-t-40">
+        <div class="col s12">
+            <button class="btn-large w100 btn-primary" type="button" (click)="home()">Go to Home&nbsp;</button>
+        </div>
+    </div>
+</div>

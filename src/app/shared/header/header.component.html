@@ -1,0 +1,225 @@
+<!-- <div class="row bg-info2 dblock" style="padding: 5px; background-color: #3965d7!important;"></div> -->
+<header class="topbar">
+    <!-- <div class="row bg-info">
+        <div class="col l8">
+        </div>
+        <div class="col 8 right-align" style="height: 100px;"> -->
+            <!-- <div class="search-sec"> -->
+                <!-- <input type="search" class="form-control search-input" autocomplete="off" placeholder="Search Workspace/Tags" [formControl]="searchField"> -->
+                <!-- <span class="material-icons search-icon" matPrefix> -->
+                    <!-- search -->
+                <!-- </span> -->
+            <!-- </div> -->
+        <!-- </div>
+    </div> -->
+    <!-- ============================================================== -->
+    <!-- Navbar scss in header.scss -->
+    <!-- ============================================================== -->
+    <nav>
+        <div class="nav-wrapper">
+            <!-- ============================================================== -->
+            <!-- Logo you can find that scss in header.scss -->
+            <!-- ============================================================== -->
+            <a href="javascript:void(0)" (click)="homePage()" class="brand-logo bg-white">
+                <span class="icon">
+                    <img class="light-logo" src="assets/images/Abbrevia8 Logo Color - 4.png" height="50px">
+                    <!-- <img class="light-logo" src="assets/images/Ab8_logo_primary_color (003).png" height="50px"> -->
+                </span>
+
+            </a>
+            <!-- <div class="search-sec">
+                <input type="search" class="form-control search-input" autocomplete="off"
+                    placeholder="Search Workspace/Tags" (ngModelChange)="searchWordChange($event)"
+                    [(ngModel)]="searchField">
+                <span class="material-icons search-icon" matPrefix>
+                    search
+                </span>
+            </div> -->
+            <!-- ============================================================== -->
+            <!-- Logo you can find that scss in header.scss -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Left topbar icon scss in header.scss -->
+            <!-- ============================================================== -->
+         
+            <!-- ============================================================== -->
+            <!-- Left topbar icon scss in header.scss -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Right topbar icon scss in header.scss -->
+            <!-- ============================================================== -->
+            <ul class="right">
+
+                <li>
+                    <div ngbDropdown class="d-inline-block">
+                        <a id="dropdownForm1" ngbDropdownToggle class="dropdown-trigger notify"
+                            href="javascript: void(0);" data-target="noti_dropdown"><i class="material-icons notify"
+                                style="color: #fff; margin-top: -3px;">notifications</i></a>
+                        <div ngbDropdownMenu aria-labelledby="dropdownForm1">
+                            <ul id="noti_dropdown" class="mailbox dropdown-content custom-db-notify">
+                                <li>
+                                    <div class="drop-title">Notifications</div>
+                                </li>
+                                <li>
+                                    <div class="message-center" *ngFor="let item of notificationData">
+                                        <a (click)="notificationClick(item)">
+                                            <span class="btn-floating btn-small red" *ngIf="item.n_type == 'workspace'">
+                                                <i class="material-icons">link</i> </span>
+                                            <span class="btn-floating btn-small blue" *ngIf="item.n_type == 'Merge'">
+                                                <i class="material-icons">date_range</i></span>
+                                            <span class="btn-floating btn-small green"
+                                                *ngIf="item.n_type == 'Document'">
+                                                <i class="material-icons">list_alt</i> </span>
+                                            <span class="mail-contnet">
+
+                                                <span class="mail-desc">{{item?.n_desc}}</span> <span
+                                                    class="time">{{item?.created_dt | date:'shortTime'}}</span>
+                                            </span>
+                                        </a>
+
+
+                                    </div>
+
+                                </li>
+
+                                <!-- <li>
+                                    <div class="message-center">
+
+                                        <a href="#">
+                                            <span class="btn-floating btn-small red"><i
+                                                    class="material-icons">link</i></span>
+                                            <span class="mail-contnet">
+
+                                                <span class="mail-desc">Arun shared D&D workspace </span> <span class="time">9:30 AM</span>
+                                            </span>
+                                        </a>
+
+                                        <a href="#">
+                                            <span class="btn-floating btn-small blue"><i
+                                                    class="material-icons">date_range</i></span>
+                                            <span class="mail-contnet">
+
+                                                <span class="mail-desc">Internal Affairs has been merged to Master
+
+                                                </span>
+                                            <span class="time">9:10 AM</span>
+                                            </span>
+                                        </a>
+
+                                        <a href="#">
+                                            <span class="btn-floating btn-small green"><i
+                                                    class="material-icons">face</i></span>
+                                            <span class="mail-contnet">
+
+                                                <span class="mail-desc">New workspace Startup Fudary is shared with
+                                                    you</span>
+                                            <span class="time">9:02 AM</span>
+                                            </span>
+                                        </a>
+                                    </div>
+                                </li> -->
+
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- <a class="dropdown-trigger notify" href="javascript: void(0);" data-target="noti_dropdown"><i
+                            class="material-icons notify" style="color: black; margin-top: -3px;">notifications</i></a>
+                    <ul id="noti_dropdown" class="mailbox dropdown-content"
+                        [ngClass]="{'header-dp-notify-show': commonfunctionService.isNotifyClk, 'header-dp-close':!commonfunctionService.isNotifyClk }">
+                        <li>
+                            <div class="drop-title">Notifications</div>
+                        </li>
+                        <li>
+                            <div class="message-center">
+                           
+                                <a href="#">
+                                    <span class="btn-floating btn-small red"><i class="material-icons">link</i></span>
+                                    <span class="mail-contnet">
+
+                                        <span class="mail-desc">Arun shared D&D workspace </span> <span
+                                            class="time">9:30 AM</span>
+                                    </span>
+                                </a>
+                              
+                                <a href="#">
+                                    <span class="btn-floating btn-small blue"><i
+                                            class="material-icons">date_range</i></span>
+                                    <span class="mail-contnet">
+
+                                        <span class="mail-desc">Internal Affairs has been merged to Master
+
+                                        </span>
+                                        <span class="time">9:10 AM</span>
+                                    </span>
+                                </a>
+
+                                <a href="#">
+                                    <span class="btn-floating btn-small green"><i class="material-icons">face</i></span>
+                                    <span class="mail-contnet">
+
+                                        <span class="mail-desc">New workspace Startup Fudary is shared with you</span>
+                                        <span class="time">9:02 AM</span>
+                                    </span>
+                                </a>
+                            </div>
+                        </li>
+
+                    </ul> -->
+                </li>
+
+                <!-- ============================================================== -->
+                <!-- Profile icon scss in header.scss -->
+                <!-- ============================================================== -->
+                <!-- <li><a class="dropdown-trigger profile" href="javascript: void(0);" data-target="user_dropdown"><img
+                            src="assets/images/users/2.jpg" alt="user" class="circle profile-pic"></a>
+                    <ul id="user_dropdown" class="mailbox dropdown-content dropdown-user"
+                        [ngClass]="{'header-dp-show': commonfunctionService.isHeaProClk, 'header-dp-close':!commonfunctionService.isHeaProClk }">
+                        <li>
+                            <div class="dw-user-box">
+                                <div class="u-img"><img src="assets/images/users/2.jpg" alt="user"></div>
+                                <div class="u-text">
+                                    <h4>{{profileObj?.email}}</h4>
+                                    <p>{{profileObj?.fname}} {{profileObj?.lname}}</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li role="separator" class="divider"></li>
+                        <li><a href="javascript: void(0);" (click)="logout()"><i class="material-icons">power_settings_new</i> Logout</a></li>
+                    </ul>
+                </li> -->
+                <li>
+                    <div ngbDropdown class="d-inline-block">
+                        <a id="dropdownForm1" style="text-decoration: none !important;" ngbDropdownToggle class="dropdown-trigger profile"
+                            href="javascript: void(0);" data-target="user_dropdown">{{profileObj?.fname}}
+                            <i class="material-icons right">arrow_drop_down</i></a>
+                        <div ngbDropdownMenu aria-labelledby="dropdownForm1">
+                            <ul id="user_dropdown" class="mailbox dropdown-content dropdown-user custom-db">
+                                <li>
+                                    <div class="dw-user-box">
+                                        <div class="u-img"><img src="assets/images/users/2.jpg" alt="user"></div>
+                                        <div class="u-text">
+                                            <h4>{{profileObj?.email}}</h4>
+                                            <p>{{profileObj?.fname}} {{profileObj?.lname}}</p>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li role="separator" class="divider"></li>
+                                <li><a href="javascript: void(0);" (click)="logout()"><i
+                                            class="material-icons">power_settings_new</i> Logout</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </li>
+            </ul>
+
+            <!-- ============================================================== -->
+            <!-- Right topbar icon scss in header.scss -->
+            <!-- ============================================================== -->
+        </div>
+
+    </nav>
+    <!-- ============================================================== -->
+    <!-- Navbar scss in header.scss -->
+    <!-- ============================================================== -->
+</header>

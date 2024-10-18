@@ -1,0 +1,62 @@
+<div id="loginform" class="login-form">
+    <div class="p-l-10">
+        <h5 class="font-medium m-b-0 m-t-40">Login to your account</h5>
+
+    </div>
+    <!-- Form -->
+    <div class="row">
+        <form class="col s12" [formGroup]="formGroup" autocomplete="off">
+            <!-- email -->
+            <div class="row">
+                <div class="input-field col s12 mb-1">
+                    <mat-form-field class="w-100">
+                        <mat-label for="email">Email</mat-label>
+                        <input matInput type="email" id="email" formControlName="email" (ngModelChange)="resetErrorMessage()" required>
+                        <mat-error *ngIf="formGroup.controls?.email.hasError('required') || formGroup.controls?.email.hasError('pattern')">
+                            Please enter a valid Email.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- email -->
+            <!-- pwd -->
+            <div class="row">
+                <div class="input-field col s12 mt-0 mb-4">
+                    <mat-form-field class="w-100">
+                        <mat-label for="password">Password</mat-label>
+                        <input matInput [type]="hidePassword ? 'password' : 'text'" id="password" (ngModelChange)="resetErrorMessage()" [ngClass]="formGroup.controls?.password.value ? 'password' : ''" formControlName="password" required>
+                        <button *ngIf="formGroup.controls?.password.value" class="view-password-icon" mat-icon-button matSuffix (click)="hidePassword = !hidePassword" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hidePassword">
+                            <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+                        </button>
+                        <mat-error *ngIf="formGroup.controls?.password.hasError('required')">
+                            Please enter a valid Password.
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+            </div>
+            <!-- pwd -->
+            <!-- remember me and forgot pwd -->
+            <div class="row">
+                <div class="col s7">
+                    <label>
+                        <input type="checkbox" formControlName="rememberMe" class="tabbed" />
+                        <span>Remember Me?</span>
+                    </label>
+                </div>
+                <div class="col s5 right-align"><a [routerLink]="['/forgot-pass']" class="link" id="to-recover">Forgot
+                        Password?</a></div>
+            </div>
+            <!-- remember me and forgot pwd -->
+            <div class="row m-t-30">
+                <div class="col s12">
+                    <div *ngIf="errorMessage" class="invalid-feedback err-msg-sec d-block">{{errorMessage}} </div>
+                    <button class="btn-large w100 btn-primary" type="submit" [disabled]="formGroup?.invalid" (click)=login()>Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="center-align m-t-20 db" style="color: #9098ac;">
+        Don't have an account? <a [routerLink]="['/signup']">Sign Up!</a>
+    </div>
+</div>

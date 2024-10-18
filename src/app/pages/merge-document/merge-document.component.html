@@ -1,0 +1,199 @@
+<div class="main-wrapper" id="main-wrapper">
+
+    <div>
+        <div>
+            <div class="row p-15  bg-info2 dblock">
+                <div class="col s1 back-btn">
+                    <h5><a [routerLink]="['/pages/document-dashboard', currentWorkspace?.id]"><i
+                                class="material-icons dp48">arrow_back</i></a></h5>
+                </div>
+                <div class="col s1 docImg">
+                    <img src="assets/images/doc-round.svg" alt="" />
+                </div>
+                <div class="col s8">
+                    <h5 class="card-title black-text font-bold">{{workspaceName}}<span class="grey-text"> Merge
+                            Document</span> <!-- -->
+                        <a class="waves-effect waves-light merge-btn btn right m-t-5 btn-primary"
+                            [ngClass]="[!isMergeCompleted ? 'disabled' : '']" style="color: #ffff;width: 10%;"
+                            (click)="saveMergedDocuments()">
+                            <!-- <i class="material-icons left">share</i> -->
+                            Merge</a>
+                        <a class="right">&nbsp;</a>
+                        <a class="waves-effect waves-light merge-btn btn right m-t-5 btn-primary"
+                            style="color: #ffff;width: 10%;" *ngIf="isMergeCompleted" (click)="editDocument()">
+                            <!-- <i class="material-icons left">edit</i> -->
+                            Edit</a>
+                    </h5>
+                </div>
+            </div>
+            <div class="page-wrapper">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col s12 m-t-10">
+                            <div class="col l12  m-t-0">
+                                <div class="card" style="height: 40px;">
+                                    <div class="card-content left-align">
+                                        <div>
+                                            <h6><span style="margin-right: 25px;"><img
+                                                        src="assets/images/compare-arrows.svg"
+                                                        alt=""></span>&nbsp;&nbsp;{{workspaceVersion}}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col s1 m-t-0">
+                        </div>
+
+                        <div class="col s8 m-t-0">
+                            <div class="card">
+                                <div class="card-content">
+                                    <div class="select-file">
+                                        <div><label>File to compare</label>
+                                            <!-- <div class="acceptRejectSec"
+                                                *ngIf="currentWorkspace?.versionName === 'Master' && !hasAcceptedOrRejectedAll">
+                                                <a class="waves-effect waves-light btn acceptRejectBtn right btn-primary"
+                                                    style="color: #ffff;width: 10%;" (click)="rejectAllChanges()">Reject
+                                                    All</a>
+                                                <a class="waves-effect waves-light btn acceptRejectBtn right mr5 btn-primary"
+                                                    style="color: #ffff;width: 10%;" (click)="acceptAllChanges()">Accept
+                                                    All</a>
+                                            </div> -->
+                                        </div>
+
+                                        <select class="form-control" (change)="onDocumentChange($event.target.value)">
+                                            <option *ngFor="let doc of mergedDocuments; let i=index" value="{{i}}">
+                                                {{doc.document_name}} <span *ngIf="doc.document_status === 'New'">[New
+                                                    Document]</span></option>
+                                        </select>
+                                    </div>
+                                    <div class="p-15 merge-text">
+                                        <div *ngIf="selectedDocument" #selectedDocumentRef
+                                            [innerHTML]="selectedDocument | sanitizeHtml"></div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="col s3 m-t-0">
+                            <div class="card" style="max-height: 870px!important;border-left:2px solid#225DE7;">
+                                <div class="card-content">
+                                    <h6> <span class="btn-floating btn-medium btn-primary"><i
+                                                class="material-icons">chat</i></span>
+                                        <span class="mail-contnet">
+                                            <span class="">&nbsp;&nbsp;Edit comments - {{documentName}} </span>
+                                        </span>
+                                    </h6>
+                                    <form [formGroup]="chatFormGroup" autocomplete="off">
+                                        <div class="row">
+                                            <div class="cols s9">
+                                                <div class="input-field  m-t-20 m-b-0"
+                                                    style="position: relative;margin-left: 20px;">
+                                                    <input type="text" class="form-control" [(ngModel)]="messageText"
+                                                        formControlName="messageInputField" name="messageInputField"
+                                                        placeholder="Type and enter" name="msg" autocomplete="off"
+                                                        [disabled]="chatForm?.messageInputField.errors"
+                                                        (enter)="sendMessage()" required minlength="2" maxlength="200">
+                                                </div>
+
+                                            </div>
+                                            <div class="col s3  m-t-20">
+                                                <button type="submit" class="btn-floating btn-small right btn-primary"
+                                                    (click)="sendMessage()"
+                                                    [disabled]="chatForm?.messageInputField.errors">
+                                                    <i class="fas fa-paper-plane"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                                <div class="card-content" style="margin-top: -20px;">
+                                    <div class="" style="overflow: hidden; outline: none;" tabindex="5001">
+                                        <div class="chat-body">
+                                            <div #list class="list" *ngIf="senderEmail">
+                                                <div [ngClass]="(instantChat.email == senderEmail)? 'rightChat' : 'leftChat'"
+                                                    class="answer" *ngFor="let instantChat of instantMessage"
+                                                    style="margin-top: 30px;">
+
+                                                    <div *ngIf="instantChat.email == senderEmail" class="chat-img">
+                                                        Me
+                                                    </div>
+                                                    <div *ngIf="instantChat.email != senderEmail" class="chat-img">
+                                                        {{instantChat.user.charAt(0)}}
+                                                    </div>
+                                                    <div class="name" *ngIf="instantChat.email != senderEmail">
+                                                        <h6>{{instantChat.user}} </h6>
+                                                    </div>
+                                                    <div class="chat-content" *ngIf="instantChat.email != senderEmail">
+                                                        <div class=" box bg-light-info text"> {{instantChat.message}}
+                                                        </div>
+                                                        <div class="time">{{instantChat.time}}</div>
+                                                    </div>
+                                                    <div class="chat-content" *ngIf="instantChat.email == senderEmail">
+                                                        <div class="box bg-light-info rightChat-text">
+                                                            {{instantChat.message}}</div>
+                                                        <div class="rightChat-time">{{instantChat.time}}</div>
+                                                    </div>
+                                                </div>
+                                                <div [ngClass]="(historychat.email == senderEmail)? 'rightChat' : 'leftChat'"
+                                                    class="answer " *ngFor="let historychat of historyMessages"
+                                                    style="margin-top: 30px;">
+                                                    <div *ngIf="historychat.email == senderEmail" class="chat-img">
+                                                        Me
+                                                    </div>
+                                                    <div *ngIf="historychat.email != senderEmail" class="chat-img">
+                                                        {{historychat.Name.charAt(0)}}
+                                                    </div>
+                                                    <div class="name" *ngIf="historychat.email != senderEmail">
+                                                        <h6>{{historychat.Name}} </h6>
+                                                    </div>
+                                                    <div class="chat-content" *ngIf="historychat.email != senderEmail">
+                                                        <div class=" box bg-light-info text"> {{historychat.message}}
+                                                        </div>
+                                                        <div class="time">{{historychat.date | timeAgo}}</div>
+                                                    </div>
+                                                    <div class="chat-content" *ngIf="historychat.email == senderEmail">
+                                                        <div class="box bg-light-info rightChat-text">
+                                                            {{historychat.message}}</div>
+                                                        <div class="rightChat-time">{{historychat.date | timeAgo}}</div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col s12 m-t-10 mb-4">
+                            <div class="col l2 m-t-10">
+                            </div>
+
+                            <!-- <div class="col l12" *ngIf="currentWorkspace?.versionName === 'Master'">
+                                <div class="row" style="margin-top: -5px;">
+                                    <div class="input-field col s12">
+                                        <textarea type="text" rows="2" id="desc" (focus)="onCommentFocus()" (blur)="onCommentBlur($event)" style="border-bottom: 1px solid; border-top: 1px solid; margin-top: 10px; padding: 10px;"></textarea>
+                                        <label for="desc" [ngClass]="[isCommentActive ? 'active': '']">&nbsp;Comments
+                                            (140
+                                            Characters Max)</label>
+                                    </div>
+                                </div>
+                                <a class="waves-effect waves-light merge-btn btn btn-round right m-t-10" [ngClass]="[!isMergeCompleted ? 'disabled' : '']" style="background-color: #3161df;" (click)="saveMergedDocuments()">Merge</a>
+                                <a class="right">&nbsp;</a>
+                                <a class="waves-effect waves-light merge-btn btn btn-round right m-t-10" *ngIf="isMergeCompleted" style="background-color: #3161df;" (click)="editDocument()">Edit</a>
+                            </div> -->
+
+                            <div class="col l2 m-t-10">
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>

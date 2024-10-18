@@ -1,0 +1,83 @@
+.search-input {
+    width: 90% !important;
+    border: none !important;
+    font-size: 14px !important;
+    height: 35px !important;
+    color: #ffff !important;
+}
+
+.search-icon {
+    font-size: 1.3rem;
+    display: inline;
+    text-align: center;
+    top: 6px;
+    position: relative;
+    color: #ffff;
+}
+
+.search-sec {
+    border: 1px solid transparent;
+    border-radius: 5px;
+    background-color: #113895;
+    padding: -22px;
+    width: 70%;
+    height: 42px;
+    margin: 10px;
+    margin-left: 130px;
+}
+
+.header-search {
+    padding-bottom: 10px;
+    padding-top: 5px;
+	display: inherit;
+	height: 60px;
+}
+
+@media (max-width: 767px) {
+    .search-icon {
+        margin-left: 10px !important;
+    }
+    .search-sec {
+        width: 60% !important;
+    }
+}
+
+.pt40 {
+    padding-top: 40px !important;
+}
+
+@media (min-width: 576px) {
+    ::ng-deep .modal-dialog {
+        max-width: initial !important;
+        margin: initial !important;
+        padding: 24px !important;
+    }
+}
+
+/* .mln70 {
+    margin-left: -70px !important;
+}
+
+.docImg {
+    margin-top: -5px !important;
+}
+
+.disGrid {
+    display: grid !important;
+}
+
+@media (max-width: 767px) {
+    .pl20 {
+        padding-left: 20px;
+    }
+    .mauto {
+        margin-left: auto !important;
+    }
+    .mln50 {
+        margin-left: -50px !important;
+    }
+    .docImgmbl {
+        margin-right: 10px;
+        margin-left: -20px !important;
+    }
+} */

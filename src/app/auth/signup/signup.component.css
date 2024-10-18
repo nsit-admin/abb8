@@ -1,0 +1,25 @@
+.acceptance {
+    color: #007bff !important;
+}
+
+.errorMsg {
+    font-size: inherit;
+    font-weight: 400;
+    line-height: 1.125;
+    font-family: "Source Sans Pro", sans-serif;
+    letter-spacing: normal;
+    color: red;
+}
+
+.mt10 {
+    margin-top: 10px;
+}
+
+a:focus {
+    color: #2962FF;
+    text-decoration: underline;
+}
+
+button.btn-large:focus {
+    background-color: #2196F3 !important;
+}

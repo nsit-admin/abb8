@@ -1,0 +1,8 @@
+a:focus {
+    color: #2962FF;
+    text-decoration: underline;
+}
+
+/* button.btn-large:focus {
+    background-color: #2196F3 !important;
+} */

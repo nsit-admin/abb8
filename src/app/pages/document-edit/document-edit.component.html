@@ -1,0 +1,389 @@
+<div class="main-wrapper" id="main-wrapper">
+    <!-- <app-header></app-header> -->
+
+    <div>
+        <!-- Braedcrump Section Starts -->
+        <div class="row p15-d0  bg-info2 dblock breadcrump-sec">
+            <div class="col s1 back-btn">
+                <h5><a [routerLink]="['/pages/document-dashboard', workSpaceObj.id]"><i
+                            class="material-icons dp48">arrow_back</i></a></h5>
+            </div>
+            <div class="col s1 docImg">
+                <img src="assets/images/doc-round.svg" alt="" />
+            </div>
+            <div class="col s8">
+                <h5 class="card-title black-text">{{workspaceData?.w_name}} - <span
+                        class="grey-text">{{documentObj.documentName}}</span></h5>
+            </div>
+            <div class="col s1 right" style="margin-top: -18px">
+                <!-- <a (click)="saveEditedDoc()" class="waves-effect waves-light btn btn-round right m-t-10" style="background-color: #3161df;;color: #ffff;">Save</a> -->
+            </div>
+        </div>
+        <!-- Braedcrump Section Ends -->
+        <div class="page-wrapper">
+            <div class="container-fluid bg-white">
+                <div class="row">
+                    <!-- Documents List Section Starts  -->
+                    <div class="col s3 m-t-10">
+                        <div class="card cus-card bor-none">
+                            <div class="card-content">
+                                <div class="doc-folder-sec">
+                                    <span class="doc-folder-icon"><i class="far fa-folder"></i></span>
+                                    <div class="doc-ver-sec">
+                                        <div class="doc-ver-file">
+                                            {{workspaceData?.w_version?workspaceData?.w_version:'Version'}}
+                                        </div>
+                                        <div class="doc-ver-name grey-text">
+                                            Created by {{workspaceData?.created_by}}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div #docList class="doc-list-hea-sec">Documents</div>
+                                <div *ngFor="let document of documentList">
+                                    <div class="doc-list" (click)="documentSelect(document._id)"
+                                        [ngClass]="{'doc-select': (document._id == documentId), '': !(document._id == documentId)}">
+                                        <img src="assets/images/file.svg" alt="" />
+                                        <div class="doc-list-sec" matTooltip="{{document.documentName}}">
+                                            <div class="doc-list-file" [style.width.px]="docListWidth">
+                                                {{document.documentName}}
+                                            </div>
+                                            <div class="doc-list-name grey-text">
+                                                {{ document.modified_dt | timeAgo }}
+                                            </div>
+                                        </div>
+                                        <div class="doc-edit-icon" *ngIf="document._id == documentId">
+                                            <span><i class="fas fa-pencil-alt"></i></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Documents List Section Ends -->
+                    <!-- Ck-editor Section Starts -->
+                    <div class="col s6 m-t-10">
+                        <!-- <a class="waves-effect waves-light btn btn-round m-t-10 btn-primary"  (click)="openModal(chatTemplate)"><i class="material-icons">chat_bubble</i></a> -->
+                        <!-- <img src="assets/images/chat.png" style="color: #ffff;z-index: 9999; position: fixed;left: 22rem;
+                        bottom: 1rem; height: 5rem; margin-left: -15px;" alt="" (click)="openModal(chatTemplate)"/> -->
+                        <!-- <img class ="chatbox__icon" src="assets/images/chat.png" style="color: #ffff;z-index: 9999; position: fixed;right: 100px;
+                        bottom: 1rem; height: 5rem; margin-left: -15px;" alt="" (click)="openModal()"/>  -->
+                        <!-- <i class="fab fa-rocketchat chatbox__icon" style="z-index: 9999; position: fixed;left: 22rem;
+                        bottom: 1rem; height: 5rem; margin-left: -15px;" (click)="openModal()"></i> -->
+
+                        <!-- <button [disabled]="isChatOpen" class ="chatbox__icon" alt="" (click)="openModal()">
+                            <i class="fas fa-hands-helping"></i>
+                            Abbrevia8 Assistant</button> -->
+                        <button *ngIf="!isChatOpen && showChat"
+                            class="modal-trigger btn-floating pulse waves-effect tooltipped waves-light  chatbox__icon"
+                            style="background-color: rgb(35, 47, 62) !important;" (click)="openModal()">
+                            <!-- <i class="fas fa-hands-helping"></i> -->
+                            <img src="assets/images/abb8_chat_icon.png" style="width: 30px;
+                                    /* align-items: center; */
+                                    padding-bottom: 5px;">
+                            <!-- <span class="material-icons" style="color: aliceblue;">
+                                        forum
+                                        </span> -->
+                            <!-- <img src="assets/images/chat.png"> -->
+                        </button>
+                        <button *ngIf="isChatOpen && showChat"
+                            class="modal-trigger btn-floating tooltipped chatbox__icon"
+                            style="background-color: rgb(35, 47, 62) !important;" (click)="closeModal()">
+                            <!-- <i class="fas fa-hands-helping"></i> -->
+                            <!-- <img src="assets/images/abb8_chat_icon.png" style="width: 45px;
+                                /* align-items: center; */
+                                padding-bottom: 5px;"> -->
+                            <span class="material-icons" style="width: 45px;
+                                /* align-items: center; */
+                                padding-bottom: 5px; color: white;">
+                                clear
+                            </span>
+                            <!-- <img src="assets/images/chat.png"> -->
+                        </button>
+
+                        <!-- <div class="chatbox__window">
+                            <div class="chatbox__top">
+                                <div class="chatbox__avatar">
+                                </div>
+                                <div class="chatbox__name">
+                                    <p class="chatbox__namepara">Abbrevia8 Assistant</p>
+                                </div>
+                                <div class="chatbox__close">
+                                    <a (click)="closeModal()"><i class="far fa-times-circle chatbox__closeicon"></i></a>
+                                </div>
+                            </div>
+                            <div #chatMsg class="chatbox__message">
+                                <div [innerHTML]="conversation | sanitizeHtml"></div>
+                            </div>
+                            <div class="chatbox__typing">
+
+                
+                                <input type="text" maxlength="256" class="chatbox__msgbox"
+                                    placeholder="Type your message here" [(ngModel)]="message" (keyup.enter)="startChat()">
+                                    <span class="material-icons chatbox__sendbtn" matPrefix></span>
+                              
+                            </div>
+                        </div> -->
+                        <div class="chat-wrapper" style="position: relative;">
+                            <div class="chat-container">
+                                <div class="chat-header">
+                                    <div class="chat-header-container">
+                                        <div>
+                                            <div class="welcome-screen-header-container">
+                                                <div class="welcome-screen-header">
+                                                    <div class="welcome-screen-header-content">
+                                                        <span>
+                                                            <img class="light-logo"
+                                                                src="assets/images/Abbrevia8 Logo Final 2.png"
+                                                                height="40px">
+                                                            <img class="chat-close-icon right"
+                                                                src="assets/images/close-icon.svg"
+                                                                (click)="closeModal()">
+                                                        </span>
+                                                        <span class="welcome-screen-header-title">
+                                                            Welcome to Abbrevia8 Assistant
+                                                        </span>
+                                                        <!-- <div class="header-textbox">
+                                                            <div class="header-textbox-container">
+                                                                <form style="width: 100%;">
+                                                                    <div style="display: flex; flex-direction: row;">
+                                                                        <div class="input-container">
+                                                                            <textarea type="text" class="input-textarea"
+                                                                                #messageValue maxlength="256"
+                                                                                placeholder="Type your response here."
+                                                                                aria-label="Type your response here."
+                                                                                style="height: 28px;" name="message"
+                                                                                [(ngModel)]="message"
+                                                                                (keydown.enter)="startChat($event)"></textarea>
+                                                                        </div>
+                                                                        <button data-qa="message-button" type="submit"
+                                                                            class="input-btn" disabled="">
+                                                                            <div style="position: relative;top: 3px;">
+                                                                                <img *ngIf="!(messageValue.value.length>0)"
+                                                                                    src="assets/images/send-icon.svg"
+                                                                                    alt="" />
+
+                                                                                <img *ngIf="messageValue.value.length>0"
+                                                                                    src="assets/images/send-enable-icon.svg"
+                                                                                    alt="" (click)="startChat($event)"/>
+                                                                            </div>
+                                                                        </button>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div> -->
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div style="width: 100%;">
+                                    <div class="welcome-content">
+                                        <div class="welcome-screen">
+                                            <div class="popular-topics" #chatMsg>
+                                                <div #chatConv [innerHTML]="conversation | sanitizeHtml"></div>
+                                            </div>
+                                            <div class="header-textbox">
+                                                <div class="header-textbox-container">
+                                                    <form style="width: 100%;">
+                                                        <div style="display: flex; flex-direction: row;">
+                                                            <div class="input-container">
+                                                                <textarea type="text" class="input-textarea"
+                                                                    #messageValue maxlength="256"
+                                                                    placeholder="Type your response here."
+                                                                    aria-label="Type your response here."
+                                                                    style="height: 28px;" name="message"
+                                                                    [(ngModel)]="message"
+                                                                    (keydown.enter)="startChat($event)"></textarea>
+                                                            </div>
+                                                            <button data-qa="message-button" type="submit"
+                                                                class="input-btn" disabled="">
+                                                                <div style="position: relative;top: 3px;">
+                                                                    <!-- <img
+                                                                        src="assets/images/send-icon.svg" alt="" (click)="startChat($event)"/> -->
+                                                                    <img *ngIf="!(messageValue.value.length>0)"
+                                                                        src="assets/images/send-icon.svg" alt="" />
+
+                                                                    <img *ngIf="messageValue.value.length>0"
+                                                                        src="assets/images/send-enable-icon.svg" alt=""
+                                                                        (click)="startChat($event)" />
+                                                                </div>
+                                                            </button>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                        <a *ngIf="workspaceData?.w_version !== 'Master'" (click)="submitToReview(true)"
+                            class="waves-effect waves-light btn right m-t-10 btn-primary"
+                            style="color: #ffff;width: 15%;">
+                            <!-- <i class="material-icons left">publish</i> -->
+                            Submit
+                        </a>
+                        <a *ngIf="workspaceData?.w_version !== 'Master'" (click)="saveEditedDoc()"
+                            class="waves-effect waves-light btn right m-t-10 btn-primary mr-2"
+                            style="color: #ffff;width: 15%;">
+                            <!-- <i class="material-icons left">drafts</i> -->
+                            Save Draft
+                        </a>
+                        <a *ngIf="workspaceData?.w_version === 'Master'" (click)="saveEditedDoc()"
+                            class="waves-effect waves-light btn right m-t-10 btn-primary mr-2"
+                            style="color: #ffff;width: 20%;">
+                            <!-- <i class="material-icons left">save</i> -->
+                            Save
+                        </a>
+                        <div class="card cus-card bor-none">
+                            <div class="card-content pt60">
+                                <div class="form-group">
+                                    <form (ngSubmit)="saveEditedDoc()" #demoForm="ngForm">
+
+                                        <!-- <ckeditor #editor [editor]="classicEditor" [(ngModel)]="documentObj.documentHtml" id="description" name="description">
+                                    </ckeditor> -->
+                                        <!-- <ckeditor #editor [editor]="classicEditor" [(ngModel)]="documentObj.documentHtml" (ready)="onReady($event)" id="description" name="description"></ckeditor> -->
+                                        <div class="document-editor">
+                                            <div class="document-editor__toolbar"></div>
+
+                                            <div class="document-editor__editable-container">
+                                                <div class="doc-loader"
+                                                    [ngClass]="{'visibility-show': loading, 'visibility-hide':!loading }">
+                                                    <div class="loader">
+                                                        <div class="loader__figure"></div>
+                                                        <p class="loader__label">Abbrevia 8</p>
+                                                    </div>
+                                                </div>
+                                                <div class="document-editor__editable">
+                                                    <div [innerHTML]="documentObj.documentHtml | sanitizeHtml"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!-- <ckeditor [data]="documentObj.documentHtml" (change)="onChange($event)"></ckeditor> -->
+                                        <!-- <hr> -->
+                                    </form>
+                                    <!-- <a (click)="saveEditedDoc()" class="waves-effect waves-light btn btn-round right m-t-10" style="background-color: #3161df;color: #ffff;">Save</a> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Ck-editor Section Ends -->
+                    <div class="col s3 m-t-10">
+                        <div class="card" style="max-height: 870px!important;border-left:2px solid#225DE7;">
+                            <div class="card-content">
+                                <h6> <span class="btn-floating btn-medium btn-primary"><i
+                                            class="material-icons">chat</i></span>
+                                    <span>
+                                        <span class="">&nbsp;&nbsp;Edit comments - {{documentObj.documentName}} </span>
+                                    </span>
+                                </h6>
+                                <form [formGroup]="chatFormGroup" autocomplete="off">
+                                    <div class="row">
+                                        <div class="cols s9">
+                                            <div class="input-field  m-t-20 m-b-0"
+                                                style="position: relative;margin-left: 20px;">
+                                                <input type="text" class="form-control" [(ngModel)]="messageText"
+                                                    formControlName="messageInputField" name="messageInputField"
+                                                    placeholder="Type and enter" name="msg" autocomplete="off"
+                                                    [disabled]="chatForm?.messageInputField.errors"
+                                                    (enter)="sendMessage()" required minlength="2" maxlength="200">
+                                            </div>
+
+                                        </div>
+                                        <div class="col s3  m-t-20">
+                                            <button type="submit" class="btn-floating btn-small right btn-primary"
+                                                (click)="sendMessage()" [disabled]="chatForm?.messageInputField.errors">
+                                                <i class="fas fa-paper-plane"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="card-content" style="margin-top: -20px;">
+                                <div class="" style="overflow: hidden; outline: none;" tabindex="5001">
+                                    <div class="chat-body">
+                                        <div #list class="list" *ngIf="senderEmail">
+                                            <div [ngClass]="(instantChat.email == senderEmail)? 'rightChat' : 'leftChat'"
+                                                class="answer" *ngFor="let instantChat of instantMessage"
+                                                style="margin-top: 30px;">
+
+                                                <div *ngIf="instantChat.email == senderEmail" class="chat-img">
+                                                    Me
+                                                </div>
+                                                <div *ngIf="instantChat.email != senderEmail" class="chat-img">
+                                                    {{instantChat.user.charAt(0)}}
+                                                </div>
+                                                <div class="name" *ngIf="instantChat.email != senderEmail">
+                                                    <h6>{{instantChat.user}} </h6>
+                                                </div>
+                                                <div class="chat-content" *ngIf="instantChat.email != senderEmail">
+                                                    <div class=" box bg-light-info text"> {{instantChat.message}}</div>
+                                                    <div class="time">{{instantChat.time}}</div>
+                                                </div>
+                                                <div class="chat-content" *ngIf="instantChat.email == senderEmail">
+                                                    <div class="box bg-light-info rightChat-text">
+                                                        {{instantChat.message}}</div>
+                                                    <div class="rightChat-time">{{instantChat.time}}</div>
+                                                </div>
+                                            </div>
+                                            <div [ngClass]="(historychat.email == senderEmail)? 'rightChat' : 'leftChat'"
+                                                class="answer " *ngFor="let historychat of historyMessages"
+                                                style="margin-top: 30px;">
+                                                <div *ngIf="historychat.email == senderEmail" class="chat-img">
+                                                    Me
+                                                </div>
+                                                <div *ngIf="historychat.email != senderEmail" class="chat-img">
+                                                    {{historychat.Name.charAt(0)}}
+                                                </div>
+                                                <div class="name" *ngIf="historychat.email != senderEmail">
+                                                    <h6>{{historychat.Name}} </h6>
+                                                </div>
+                                                <div class="chat-content" *ngIf="historychat.email != senderEmail">
+                                                    <div class=" box bg-light-info text"> {{historychat.message}}</div>
+                                                    <div class="time">{{historychat.date | timeAgo}}</div>
+                                                </div>
+                                                <div class="chat-content" *ngIf="historychat.email == senderEmail">
+                                                    <div class="box bg-light-info rightChat-text">
+                                                        {{historychat.message}}</div>
+                                                    <div class="rightChat-time">{{historychat.date | timeAgo}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div>
+    <ng-template #chatTemplate>
+        <div class="modal-header" style="border-bottom: none;padding:0.25em;">
+            Abbrevia8 Assistant
+            <button type="button" class="close pull-right" aria-label="Close"
+                (click)="close()">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div [innerHTML]="conversation | sanitizeHtml"></div>
+            <br/>
+            <div class="search-sec">
+                <input type="search" class="form-control search-input" autocomplete="off"
+                    [(ngModel)]="message" (keyup.enter)="startChat()" >
+                <span class="material-icons search-icon" matPrefix>
+                    send
+                </span>
+            </div>
+        </div>
+    </ng-template>
+</div> -->

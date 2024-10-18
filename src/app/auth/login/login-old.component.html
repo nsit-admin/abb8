@@ -1,0 +1,71 @@
+<header class="navbar pcoded-header navbar-expand-lg navbar-light">
+		
+			
+				<div class="m-header">
+			
+					<a href="#!" class="b-brand">
+						
+						<img src="assets/images/logo-1.png" alt="" class="logo">
+						<img src="assets/images/logo-icon.png" alt="" class="logo-thumb">
+					</a>
+					<a href="#!" class="mob-toggler">
+						<i class="feather icon-more-vertical"></i>
+					</a>
+				</div>
+				<div class="collapse navbar-collapse">
+
+					<ul class="navbar-nav ml-auto">
+					
+					<button class="btn btn-block" style="background-color:#000; color:#fff; margin-right:50px; border-radius: 5px;"
+					routerLink="/signup" >Register</button>
+					
+						
+					</ul>
+				</div>
+				
+			
+	</header>
+<!-- [ auth-signin ] start -->
+<form [formGroup]="formGroup" autocomplete="off">
+<div class="auth-wrapper" style="margin-top:-70px;">
+	<div class="auth-content">
+		<div class="">
+			<div class="row align-items-center text-center">
+				<div class="col-md-12">
+					<div class="card-body">
+
+						<h4 class="mb-3">Login to your account</h4>
+						<div class="form-group mb-3">
+							<!-- <label class="floating-label" for="Email">Email</label> -->
+							<input type="text" class="form-control" id="Email" placeholder="Email"
+								formControlName="email">
+								<span *ngIf="formGroup.controls?.email.hasError('pattern')" style="color: red;"><sup>Please enter a valid email id.								</sup></span>
+						</div>
+						<div class="form-group">
+							<!-- <label class="floating-label" for="Password">Password</label> -->
+							<input style="color:#4680ff;" [type]="isPasswordToogled ? 'text' : 'password'" class="form-control" id="Password"
+								placeholder="Password" formControlName="password">
+							<!-- <span toggle="#password-field" class="fa fa-fw fa-eye field-icon toggle-password" (click)="togglePassword($event)"></span> -->
+							<span [ngClass]="[ isPasswordToogled ? 'fa fa-eye d-inline field-icon toggle-password' : 'fa fa-eye-slash d-inline field-icon toggle-password']" (click)="togglePassword($event)"></span>
+						</input>
+						</div>
+						<button class="btn btn-block btn-primary mb-4" [disabled]="formGroup?.invalid" (click)=login()>Sign in</button>
+						<p class="mb-2 text-muted"><a style="color:#4680ff" href="" class="f-w-400">Forgot your
+								password? </a></p>
+						<p class="mb-0 text-muted">Don’t have an account? <a [routerLink]="['/signup']" style="color:#4680ff" href=""
+								class="f-w-400">Register Here</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+</form>
+<!-- [ auth-signin ] end -->
+
+<!-- Required Js -->
+<script src="assets/js/vendor-all.min.js"></script>
+<script src="assets/js/plugins/bootstrap.min.js"></script>
+<script src="assets/js/ripple.js"></script>
+<script src="assets/js/pcoded.min.js"></script>
+
